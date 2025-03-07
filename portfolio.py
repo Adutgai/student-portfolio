@@ -5,7 +5,7 @@ import json
 import os
 import plotly.graph_objects as go
 # Set Page Config
-st.set_page_config(page_title="My Digital Footprint", page_icon="🌍", layout="wide")
+st.set_page_config(page_title="My Digital Footprint", page_icon="📚", layout="wide")
 
 # Sidebar Navigation
 st.sidebar.title("Navigation")
