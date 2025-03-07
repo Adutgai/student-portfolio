@@ -1,13 +1,15 @@
 import smtplib
 import streamlit as st
 from email.message import EmailMessage
-
+import json
+import os
+import plotly.graph_objects as go
 # Set Page Config
 st.set_page_config(page_title="My Digital Footprint", page_icon="🌍", layout="wide")
 
 # Sidebar Navigation
 st.sidebar.title("Navigation")
-pages = ["Home", "Projects", "Skills & Achievements", "Profile", "Contact"]
+pages = ["Home", "Projects", "Skills & Achievements", "Profile","Testimonials","Timeline", "Contact"]
 choice = st.sidebar.radio("Go to", pages)
 
 
@@ -454,6 +456,110 @@ if choice == "Profile":
 
 
 
+# Path to the testimonials JSON file
+testimonials_file = "testimonials.json"
+
+# Load existing testimonials from the file (if any)
+if os.path.exists(testimonials_file):
+    with open(testimonials_file, "r") as file:
+        testimonials = json.load(file)
+else:
+    testimonials = []
+
+# Section for testimonials
+if choice == "Testimonials":
+    st.title("Testimonials")
+
+    # Form to submit new testimonials
+    with st.form("testimonial_form", clear_on_submit=True):
+        author = st.text_input("Your Name:")
+        testimonial = st.text_area("Testimonial:", height=150)
+        submitted = st.form_submit_button("Submit Testimonial")
+
+        if submitted:
+            if author and testimonial:
+                # Create a new testimonial object
+                new_testimonial = {"author": author, "testimonial": testimonial}
+                
+                # Append the new testimonial to the existing list
+                testimonials.append(new_testimonial)
+
+                # Save the updated testimonials list to the JSON file
+                with open(testimonials_file, "w") as file:
+                    json.dump(testimonials, file)
+
+                st.success("Thank you for your testimonial!")
+            else:
+                st.error("Please fill in both fields.")
+
+    # Display the submitted testimonials in the desired format
+    st.subheader("What Others Say:")
+    if testimonials:
+        for testimonial in testimonials:
+            # Display each testimonial in the format: "Testimonial text" – Author's name
+            st.markdown(f"\"{testimonial['testimonial']}\" - {testimonial['author']}")
+            st.markdown("---")
+    else:
+        st.write("No testimonials yet. Be the first to leave one!")
+
+
+if choice == "Timeline":
+    st.title("📌 My Journey")
+
+    milestones = [
+        {"year": "2021", "event": "Learned Programming Languages"},
+        {"year": "2022", "event": "Started Computer Science Degree"},
+        {"year": "2023", "event": "Completed Internship at Ikugugu Company"},
+        {"year": "2025", "event": "Published Research Paper"}
+    ]
+
+    years = [m["year"] for m in milestones]
+    events = [m["event"] for m in milestones]
+
+    fig = go.Figure()
+
+    # Change timeline line to blue
+    fig.add_trace(go.Scatter(
+        x=[1] * len(years),
+        y=years,
+        mode="lines",
+        line=dict(color="#007BFF", width=5),  # 🔹 **Blue Line**
+        showlegend=False
+    ))
+
+    # Add markers and events with black text
+    fig.add_trace(go.Scatter(
+        x=[1] * len(years),
+        y=years,
+        mode="markers+text",
+        text=events,
+        textposition="middle right",
+        marker=dict(size=18, color="#007BFF", line=dict(width=3, color="white")),  # 🔹 **Blue Markers**
+        textfont=dict(size=16, color="#000000", family="Arial, sans-serif"),  # 🔹 **Black Text**
+        showlegend=False
+    ))
+
+    fig.update_layout(
+        title="📍 Academic & Professional Milestones",  # Title
+        title_font=dict(color="#000000", size=24, family="Arial, sans-serif"),  # 🔹 **Black Title Text**
+        xaxis=dict(showgrid=False, showticklabels=False, zeroline=False),
+        yaxis=dict(
+            showgrid=False, 
+            showline=False, 
+            showticklabels=True, 
+            tickmode="array", 
+            tickvals=years, 
+            ticktext=years,
+            tickfont=dict(color="#000000", size=16)  # 🔹 **Black Years**
+        ),
+        height=600,
+        plot_bgcolor="white",
+        paper_bgcolor="white",
+        margin=dict(l=50, r=50, t=50, b=50)
+    )
+
+    st.plotly_chart(fig)
+
 elif choice == "Contact":
     st.title("Leave Me a Message!!!")
 
@@ -472,7 +578,7 @@ elif choice == "Contact":
         "LinkedIn": "https://www.linkedin.com/in/adut-gai-chol-aba40a355",
         "Email": "mailto:ug2321358@ines.ac.rw",
         "Phone": "tel:+1234567890",
-        "GitHub": "https://github.com/adut_gai",
+        "GitHub": "https://github.com/adutgai",
         "Portfolio": "https://student-portfolio-hfaj7gazwjhzwnhhvwahwy.streamlit.app/"
     }
 
