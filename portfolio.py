@@ -3,7 +3,7 @@ import streamlit as st
 from email.message import EmailMessage
 import json
 import os
-
+import plotly.graph_objects as go
 # Set Page Config
 st.set_page_config(page_title="My Digital Footprint", page_icon="📚", layout="wide")
 
