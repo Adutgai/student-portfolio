@@ -171,7 +171,13 @@ if choice == "Home":
     """)
     st.markdown('</div>', unsafe_allow_html=True)
 
-
+    # Add the resume download button
+    st.download_button(
+        label="Download My Resume",
+        data=open("resume.pdf", "rb").read(),  # Path to your resume file
+        file_name="Adut_Gai_Chol_Chol_Resume.pdf",
+        mime="application/pdf",
+    )
 
 # Include Font Awesome CDN to load icons
 
