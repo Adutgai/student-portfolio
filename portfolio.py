@@ -1,8 +1,5 @@
 import smtplib
 import streamlit as st
-import streamlit as st
-from streamlit_lottie import st_lottie
-import requests
 from email.message import EmailMessage
 
 # Set Page Config
